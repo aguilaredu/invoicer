@@ -1,0 +1,15 @@
+[
+  {
+    "filename": "factura_999_A99_John Doe.pdf",
+    "name": "John Doe",
+    "phone": "123456789",
+    "lot": "A99",
+    "invoice_number": "999",
+    "message": "*Community Water Bill*\n\nDear John Doe, attached is your invoice for January 2026.\n\n✅ *You are UP TO DATE*\n\nThank you for your support!",
+    "amount": 1000.0,
+    "pending_amount": 0.0,
+    "send_receipt": true,
+    "status": "PENDING",
+    "countryCode": "1"
+  }
+]

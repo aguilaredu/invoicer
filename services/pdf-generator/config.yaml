@@ -1,0 +1,17 @@
+# config.yaml
+paths:
+  input_list: "../../shared-data/input.csv"
+  output_folder: "../../shared-data/pdfs"
+  template_path: "invoice_template/invoice.html"
+  whatsapp_output_file: "../../shared-data/output.json"
+
+invoice:
+  month: "Enero"
+  year: "2026"
+  day_issued: "1"
+  pay_before_day: "30"
+  country_code: "504"
+
+whatsapp:
+  template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!"
+  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n⚠️ *Saldo pendiente: L. {pending}*\n\nLe invitamos a ponerse al día para seguir mejorando la colonia."

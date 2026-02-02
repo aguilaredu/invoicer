@@ -1,0 +1,74 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href="invoice.css" media="print" rel="stylesheet">
+    <title>Invoice</title>
+    <meta name="description" content="Invoice demo sample">
+  </head>
+
+  <body>
+    <div id="logo-container">
+      <img src="logo.png" id="logo">
+    </div>
+    <h1>Factura</h1>
+
+    <aside>
+      <address id="from">
+        Residencial San Roberto de Sula
+        San Pedro Sula, Cortes
+        Honduras
+      </address>
+
+      <address id="to">
+        Facturar a:
+        {{nombre}} (Lote {{lote}})
+        {{telefono}}
+      </address>
+    </aside>
+
+    <dl id="informations">
+      <dt>Numero Factura</dt>
+      <dd>{{numero_factura}}</dd>
+      <dt>Fecha</dt>
+      <dd>{{mes}} {{dia}}, {{ano}}</dd>
+    </dl>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Descripcion</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cuota de seguridad y mantenimiento {{mes}} {{ano}}</td>
+          <td>L. {{ "%.2f"|format(cuota) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer>
+      <table id="total">
+        <thead>
+          <tr>
+            <th>Pagar antes de</th>
+            <th style="text-align: left;">Detalles Cuenta</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{mes}} {{dia_antes}}, {{ano}}</td>
+            <td style="text-align: left;">
+              Banco: BAC<br>
+              Nombre: Fernando Perdomo Ramos<br>
+              Cuenta: 757014141<br>
+            </td>
+            <td>L. {{ "%.2f"|format(cuota) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </footer>
+  </body>
+</html>

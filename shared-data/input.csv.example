@@ -1,0 +1,2 @@
+Lote,Nombre,Telefono,Correo,Ocupa Recibo,Estado lote,Paga,Cuota,Notas,Pendiente,invoice_number
+A99,John Doe,123456789,john.doe@email.com,TRUE,Habitado,Si,1000,,0,999

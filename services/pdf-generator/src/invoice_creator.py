@@ -55,7 +55,7 @@ class InvoiceCreator:
                 str(row.get("ocupa_recibo", "False")).strip().upper() == "TRUE"
             )
 
-            pdf_filename = get_invoice_name(row)
+            pdf_filename = get_invoice_name(row, self.invoice_config)
             full_pdf_path = os.path.join(self.output_path, pdf_filename)
 
             message = generate_whatsapp_message(

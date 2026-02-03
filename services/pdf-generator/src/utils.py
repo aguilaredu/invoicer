@@ -28,11 +28,12 @@ def load_invoice_data(invoice_data_path: str | Path) -> pd.DataFrame:
     return invoice_data
 
 
-def get_invoice_name(row) -> str:
-    lote = row["lote"]
+def get_invoice_name(row, invoice_config: dict) -> str:
     nombre = row["nombre"]
     numero_factura = row["numero_factura"]
-    file_name = f"factura_{numero_factura}_{lote}_{nombre}.pdf"
+    month = invoice_config["month"]
+    year = invoice_config["year"]
+    file_name = f"{numero_factura}-{nombre}-{month}-{year}.pdf"
     return file_name
 
 

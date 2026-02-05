@@ -11,7 +11,7 @@ def get_path(relative_path: str) -> Path:
 
 
 def load_invoice_data(invoice_data_path: str | Path) -> pd.DataFrame:
-    invoice_data = pd.read_csv(invoice_data_path)
+    invoice_data = pd.read_csv(invoice_data_path, dtype=object)
     invoice_data.columns = invoice_data.columns.str.lower().str.replace(" ", "_")
 
     invoice_data = invoice_data.rename(
@@ -24,7 +24,7 @@ def load_invoice_data(invoice_data_path: str | Path) -> pd.DataFrame:
     invoice_data["pendiente"] = pd.to_numeric(
         invoice_data["pendiente"], errors="coerce"
     ).fillna(0.0)  # type: ignore
-    invoice_data["telefono"] = invoice_data["telefono"].fillna("").astype(str)
+    invoice_data["telefono"] = invoice_data["telefono"].fillna("")
     return invoice_data
 
 

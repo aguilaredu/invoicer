@@ -6,12 +6,12 @@ paths:
   whatsapp_output_file: "../../shared-data/output.json"
 
 invoice:
-  month: "Enero"
+  month: "Febrero"
   year: "2026"
   day_issued: "1"
-  pay_before_day: "30"
+  pay_before_day: "28"
   country_code: "504"
 
 whatsapp:
   template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!"
-  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n⚠️ *Saldo pendiente: L. {pending}*\n\nLe invitamos a ponerse al día para seguir mejorando la colonia."
+  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n⚠️ *Saldo pendiente: L. {pending}*\n\nLe invitamos a ponerse al día para seguir mejorando la colonia.\n\nSi tiene alguna duda sobre su estado de cuenta, quedamos a su disposición para aclararla."

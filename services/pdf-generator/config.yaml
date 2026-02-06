@@ -4,13 +4,7 @@ paths:
   output_folder: "../../shared-data/pdfs"
   template_path: "invoice_template/invoice.html"
   whatsapp_output_file: "../../shared-data/output.json"
-
-invoice:
-  month: "Febrero"
-  year: "2026"
-  day_issued: "1"
-  pay_before_day: "28"
-  country_code: "504"
+  invoice_configs: "../../shared-data/invoice_configs.yaml"
 
 whatsapp:
   template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!"

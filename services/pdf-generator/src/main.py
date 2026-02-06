@@ -5,6 +5,7 @@ from invoice_creator import InvoiceCreator
 
 def main():
     config = load_config()  # Load configuration from YAML file
+    invoice_config = load_config(config["paths"]["invoice_configs"])
 
     # Generate invoices
     invoice_creator = InvoiceCreator(
@@ -12,7 +13,7 @@ def main():
         output_path=config["paths"]["output_folder"],
         template_path=config["paths"]["template_path"],
         whatsapp_output_path=config["paths"]["whatsapp_output_file"],
-        invoice_config=config["invoice"],
+        invoice_config=invoice_config["invoice"],
         whatsapp_config=config["whatsapp"],
     )
 

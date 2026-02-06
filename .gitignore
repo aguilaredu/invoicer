@@ -20,6 +20,7 @@ shared-data/*
 !shared-data/input.csv.example
 !shared-data/output.json.example
 !shared-data/.gitkeep
+!shared-data/invoice_configs.yaml
 
 # Ignore all content in the pdfs folder, but keep the folder
 !shared-data/pdfs/

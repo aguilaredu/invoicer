@@ -64,13 +64,17 @@ async function processRecord(record, client) {
     // Set as online
     await client.sendPresenceAvailable();
 
-    logStep(record.name, "📱", "Validating number...");
+    logStep(`${record.name}-${record.phone}`, "📱", "Validating number...");
     const sanitized_number = record.phone.toString().replace(/[- )(]/g, "");
     const final_number = `${record.countryCode}${sanitized_number}`;
     const number_details = await client.getNumberId(final_number);
 
     if (!number_details) {
-      logStep(record.name, "❌", "Failed (Number not on WhatsApp)");
+      logStep(
+        `${record.name}-${record.phone}`,
+        "❌",
+        "Failed (Number not on WhatsApp)",
+      );
       await client.sendPresenceUnavailable();
       return "FAILED";
     }
@@ -78,25 +82,38 @@ async function processRecord(record, client) {
     const chatId = number_details._serialized;
     const chat = await client.getChatById(chatId);
 
-    // Wait 1s and simulate typing
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    chat.sendStateTyping();
-
-    // Wait before sending the message
-    const wait_time_s = randomDelay(240000, 300000);
-    logStep(record.name, "⏳", `Waiting ${wait_time_s}s...`);
+    // Wait before sending the message, we will wait 50s more in typing later
+    const wait_time_s = randomDelay(140000, 200000);
+    // const wait_time_s = randomDelay(140000, 200000);
+    logStep(
+      `${record.name}-${record.phone}`,
+      "⏳",
+      `Waiting ${wait_time_s}s...`,
+    );
     await new Promise((resolve) => setTimeout(resolve, wait_time_s * 1000));
 
-    logStep(record.name, "📤", "Sending...");
+    // Simulate typing and wait 25s since that is the duration for sendStateTyping()
+    // We do it twice to be extra sure, to be removed later once we are safer
+    logStep(`${record.name}-${record.phone}`, "⏳", `Waiting to type 50s...`);
+    chat.sendStateTyping();
+    await new Promise((resolve) => setTimeout(resolve, 25000));
+    chat.sendStateTyping();
+    await new Promise((resolve) => setTimeout(resolve, 25000));
+
+    logStep(`${record.name}-${record.phone}`, "📤", "Sending...");
     const filePath = path.join(PDF_DIR, record.filename);
     const media = MessageMedia.fromFilePath(filePath);
     await client.sendMessage(chatId, media, { caption: record.message });
 
-    logStep(record.name, "✅", "Sent successfully.");
+    logStep(`${record.name}-${record.phone}`, "✅", "Sent successfully.");
     record.sent_at = new Date().toISOString();
     return "SENT";
   } catch (err) {
-    logStep(record.name, "❌", `Failed (${err.message.substring(0, 30)}...)`);
+    logStep(
+      `${record.name}-${record.phone}`,
+      "❌",
+      `Failed (${err.message.substring(0, 30)}...)`,
+    );
     record.error_msg = err.message;
     client.sendPresenceUnavailable();
     return "FAILED";
@@ -120,23 +137,35 @@ async function processQueue(client) {
   for (let i = 0; i < queue.length; i++) {
     let record = queue[i];
     console.log("-----------------------------------");
-    logStep(record.name, "⚙️", "Processing...");
+    logStep(`${record.name}-${record.phone}`, "⚙️", "Processing...");
 
     if (record.status !== "PENDING") {
-      logStep(record.name, "⏩", `Skipping (Status: ${record.status})`);
+      logStep(
+        `${record.name}-${record.phone}`,
+        "⏩",
+        `Skipping (Status: ${record.status})`,
+      );
     } else if (record.send_receipt === false) {
-      logStep(record.name, "⏩", "Skipping (Receipt not required)");
+      logStep(
+        `${record.name}-${record.phone}`,
+        "⏩",
+        "Skipping (Receipt not required)",
+      );
       record.status = "SKIPPED_NO_RECEIPT";
       saveProgress(queue);
     } else if (!record.phone || !record.countryCode) {
-      logStep(record.name, "❌", "Error (Phone/Country Code missing)");
+      logStep(
+        `${record.name}-${record.phone}`,
+        "❌",
+        "Error (Phone/Country Code missing)",
+      );
       record.status = "ERROR_PHONE_MISSING";
       saveProgress(queue);
     } else {
       const filePath = path.join(PDF_DIR, record.filename);
       if (!fs.existsSync(filePath)) {
         logStep(
-          record.name,
+          `${record.name}-${record.phone}`,
           "❌",
           `Error (PDF file missing: ${record.filename})`,
         );

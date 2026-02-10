@@ -55,8 +55,11 @@ class InvoiceCreator:
                 str(row.get("ocupa_recibo", "False")).strip().upper() == "TRUE"
             )
 
+            lot: str = str(row["lote"])
             pdf_filename = get_invoice_name(row, self.invoice_config)
-            full_pdf_path = os.path.join(self.output_path, pdf_filename)
+            lot_dir = os.path.join(self.output_path, lot)
+            os.makedirs(lot_dir, exist_ok=True)
+            full_pdf_path = os.path.join(lot_dir, pdf_filename)
 
             message = generate_whatsapp_message(
                 row, self.invoice_config, self.whatsapp_config
@@ -115,7 +118,9 @@ class InvoiceCreator:
             invoice_dict = asdict(invoice)
 
             # Use the basename for the filename field in the JSON
-            invoice_dict["filename"] = os.path.basename(invoice.filename)
+            invoice_dict["filename"] = os.path.join(
+                invoice.lot, os.path.basename(invoice.filename)
+            )
 
             # Add the country code
             invoice_dict["countryCode"] = self.invoice_config.get("country_code", "")

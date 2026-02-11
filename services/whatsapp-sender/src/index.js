@@ -3,6 +3,14 @@ const path = require("path");
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
+// --- 0. CUSTOMIZABLE WAITS ---
+const WAIT_ENABLED = true;
+const WAIT_AFTER_N_RECORDS = 10;
+const WAIT_TIME_MIN_S = 8 * 60;
+const WAIT_TIME_MAX_S = 12 * 60;
+const WAIT_TIME_BETWEEN_MSG_MIN_S = 2 * 60;
+const WAIT_TIME_BETWEEN_MSG_MAX_S = 4 * 60;
+
 // --- 1. CONFIGURATION & SETUP ---
 const SHARED_DIR = path.join(__dirname, "../../../shared-data");
 const DATA_FILE = path.join(SHARED_DIR, "output.json");
@@ -63,14 +71,17 @@ const logStep = (name, emoji, message) => {
 async function processRecord(record, client) {
   try {
     // Wait before sending the message, we will wait 50s more in typing later
-    const wait_time_s = randomDelay(140000, 200000);
+    const wait_time_s = randomDelay(
+      WAIT_TIME_BETWEEN_MSG_MIN_S,
+      WAIT_TIME_BETWEEN_MSG_MAX_S,
+    );
     logStep(
       `${record.name}-${record.phone}`,
       "⏳",
-      `Waiting ${wait_time_s}s...`,
+      `Waiting ${wait_time_s / 1000}s...`,
     );
 
-    await new Promise((resolve) => setTimeout(resolve, wait_time_s * 1000));
+    await new Promise((resolve) => setTimeout(resolve, wait_time_s));
     // Set as online
     await client.sendPresenceAvailable();
 
@@ -103,7 +114,18 @@ async function processRecord(record, client) {
     logStep(`${record.name}-${record.phone}`, "📤", "Sending...");
     const filePath = path.join(PDF_DIR, record.filename);
     const media = MessageMedia.fromFilePath(filePath);
-    await client.sendMessage(chatId, media, { caption: record.message });
+    try {
+      await client.sendMessage(chatId, media, { caption: record.message });
+    } catch (err) {
+      logStep(
+        `${record.name}-${record.phone}`,
+        "❌",
+        `Failed to send message (${err.message.substring(0, 30)}...)`,
+      );
+      record.error_msg = err.message;
+      client.sendPresenceUnavailable();
+      return "FAILED";
+    }
 
     logStep(`${record.name}-${record.phone}`, "✅", "Sent successfully.");
     record.sent_at = new Date().toISOString();
@@ -135,6 +157,18 @@ async function processQueue(client) {
   console.log(`📂 Loaded ${queue.length} records.\n`);
 
   for (let i = 0; i < queue.length; i++) {
+    // Wait every N records
+    if (WAIT_ENABLED && (i + 1) % WAIT_AFTER_N_RECORDS === 0) {
+      const wait_time_s = randomDelay(WAIT_TIME_MIN_S, WAIT_TIME_MAX_S);
+      logStep(
+        "SYSTEM",
+        "😴",
+        `Waiting for ${wait_time_s / 1000}s before the next batch...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, wait_time_s));
+    }
+
+    // Process records
     let record = queue[i];
     console.log("-----------------------------------");
     logStep(`${record.name}-${record.phone}`, "⚙️", "Processing...");
@@ -195,6 +229,6 @@ function saveProgress(data) {
 }
 
 function randomDelay(min, max) {
-  const ms = Math.floor(Math.random() * (max - min + 1) + min);
-  return (ms / 1000).toFixed(1);
+  const s = Math.floor(Math.random() * (max - min + 1) + min);
+  return (s * 1000).toFixed(1);
 }

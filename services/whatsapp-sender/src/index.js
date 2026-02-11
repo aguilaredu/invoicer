@@ -17,6 +17,7 @@ if (!fs.existsSync(SESSIONS_DIR)) {
 const client = new Client({
   authStrategy: new LocalAuth({ dataPath: SESSIONS_DIR }),
   puppeteer: {
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   },
 });
@@ -61,6 +62,15 @@ const logStep = (name, emoji, message) => {
  */
 async function processRecord(record, client) {
   try {
+    // Wait before sending the message, we will wait 50s more in typing later
+    const wait_time_s = randomDelay(140000, 200000);
+    logStep(
+      `${record.name}-${record.phone}`,
+      "⏳",
+      `Waiting ${wait_time_s}s...`,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, wait_time_s * 1000));
     // Set as online
     await client.sendPresenceAvailable();
 
@@ -76,21 +86,11 @@ async function processRecord(record, client) {
         "Failed (Number not on WhatsApp)",
       );
       await client.sendPresenceUnavailable();
-      return "FAILED";
+      return "FAILED_NOT_ON_WHATSAPP";
     }
 
     const chatId = number_details._serialized;
     const chat = await client.getChatById(chatId);
-
-    // Wait before sending the message, we will wait 50s more in typing later
-    const wait_time_s = randomDelay(140000, 200000);
-    // const wait_time_s = randomDelay(140000, 200000);
-    logStep(
-      `${record.name}-${record.phone}`,
-      "⏳",
-      `Waiting ${wait_time_s}s...`,
-    );
-    await new Promise((resolve) => setTimeout(resolve, wait_time_s * 1000));
 
     // Simulate typing and wait 25s since that is the duration for sendStateTyping()
     // We do it twice to be extra sure, to be removed later once we are safer
@@ -175,6 +175,14 @@ async function processQueue(client) {
         const finalStatus = await processRecord(record, client);
         record.status = finalStatus;
         saveProgress(queue);
+        if (finalStatus === "FAILED") {
+          logStep(
+            `${record.name}-${record.phone}`,
+            "🛑",
+            "Stopping process due to failure.",
+          );
+          break;
+        }
       }
     }
   }

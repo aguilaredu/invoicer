@@ -8,4 +8,4 @@ paths:
 
 whatsapp:
   template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!"
-  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n⚠️ *Saldo pendiente: L. {pending}*\n\nLe invitamos a ponerse al día para seguir mejorando la colonia.\n\nSi tiene alguna duda sobre su estado de cuenta, quedamos a su disposición para aclararla."
+  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n💳 *Saldo total: L. {pending} (incluye cuota de {month})*\n\n¡Gracias por su compromiso con la colonia! Le recordamos que la cuota actual puede ser cancelada hasta fin de mes. Si tiene meses anteriores sin cancelar, le animamos a regularizar su cuenta para que juntos sigamos realizando mejoras.\n\nCualquier consulta sobre su estado de cuenta, estamos para servirle."

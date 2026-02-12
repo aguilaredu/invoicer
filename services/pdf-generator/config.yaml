@@ -7,5 +7,5 @@ paths:
   invoice_configs: "../../shared-data/invoice_configs.yaml"
 
 whatsapp:
-  template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!"
-  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n💳 *Saldo total: L. {pending} (incluye cuota de {month})*\n\n¡Gracias por su compromiso con la colonia! Le recordamos que la cuota actual puede ser cancelada hasta fin de mes. Si tiene meses anteriores sin cancelar, le animamos a regularizar su cuenta para que juntos sigamos realizando mejoras.\n\nCualquier consulta sobre su estado de cuenta, estamos para servirle."
+  template_good: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n✅ *Usted está AL DÍA*\n\n¡Gracias por su apoyo a la comunidad!\n\nPuede verificar su estado de cuenta aquí: www.sanrobertodesula.org/estado?lote={lot}"
+  template_bad: "*Patronato San Roberto de Sula*\n\nEstimado(a) {name}, adjuntamos su factura de {month} {year}.\n\n💳 *Saldo total: L. {pending} (incluye cuota de {month})*\n\nLa cuota vigente puede cancelarse hasta fin de mes. Puede verificar su estado de cuenta aquí: www.sanrobertodesula.org/estado?lote={lot}\n\nCualquier consulta sobre su estado de cuenta, estamos para servirle."

@@ -47,6 +47,7 @@ def generate_whatsapp_message(row, invoice_config: dict, whatsapp_config: dict) 
             month=invoice_config["month"],
             year=invoice_config["year"],
             pending=pending_amount,
+            lot=row["lote"],
         )
     else:
         template = whatsapp_config["template_good"]
@@ -54,4 +55,5 @@ def generate_whatsapp_message(row, invoice_config: dict, whatsapp_config: dict) 
             name=row["nombre"],
             month=invoice_config["month"],
             year=invoice_config["year"],
+            lot=row["lote"],
         )

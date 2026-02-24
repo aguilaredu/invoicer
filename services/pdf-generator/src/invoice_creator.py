@@ -68,10 +68,10 @@ class InvoiceCreator:
             # Explicitly cast types to satisfy the linter
             name: str = str(row["nombre"])
             phone: str = str(row["telefono"])
-            lot: str = str(row["lote"])
             invoice_number: str = str(row["numero_factura"])
             amount: float = float(row["cuota"])
             pending_amount: float = float(row["pendiente"])
+            nueva_cuota: float = float(row["nueva_cuota"])
 
             invoice = Invoice(
                 filename=full_pdf_path,
@@ -82,6 +82,7 @@ class InvoiceCreator:
                 message=message,
                 amount=amount,
                 pending_amount=pending_amount,
+                nueva_cuota=nueva_cuota,
                 send_receipt=send_receipt,
                 status="PENDING",
             )

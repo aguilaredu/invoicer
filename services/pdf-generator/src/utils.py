@@ -24,6 +24,9 @@ def load_invoice_data(invoice_data_path: str | Path) -> pd.DataFrame:
     invoice_data["pendiente"] = pd.to_numeric(
         invoice_data["pendiente"], errors="coerce"
     ).fillna(0.0)  # type: ignore
+    invoice_data["nueva_cuota"] = pd.to_numeric(
+        invoice_data["nueva_cuota"], errors="coerce"
+    ).fillna(0.0)  # type: ignore
     invoice_data["telefono"] = invoice_data["telefono"].fillna("")
     return invoice_data
 
@@ -38,22 +41,45 @@ def get_invoice_name(row, invoice_config: dict) -> str:
 
 
 def generate_whatsapp_message(row, invoice_config: dict, whatsapp_config: dict) -> str:
-    """Generate the whatsapp message based on the pending amount."""
+    """Generate the whatsapp message based on the pending amount and new fee."""
     pending_amount = row["pendiente"]
-    if pending_amount > 0:
-        template = whatsapp_config["template_bad"]
-        return template.format(
-            name=row["nombre"],
-            month=invoice_config["month"],
-            year=invoice_config["year"],
-            pending=pending_amount,
-            lot=row["lote"],
-        )
+    nueva_cuota = row["nueva_cuota"]
+
+    if nueva_cuota > 0:
+        if pending_amount > 0:
+            template = whatsapp_config["template_bad_new_cuota"]
+            return template.format(
+                name=row["nombre"],
+                month=invoice_config["month"],
+                year=invoice_config["year"],
+                pending=pending_amount,
+                lot=row["lote"],
+                nueva_cuota=nueva_cuota,
+            )
+        else:
+            template = whatsapp_config["template_good_new_cuota"]
+            return template.format(
+                name=row["nombre"],
+                month=invoice_config["month"],
+                year=invoice_config["year"],
+                lot=row["lote"],
+                nueva_cuota=nueva_cuota,
+            )
     else:
-        template = whatsapp_config["template_good"]
-        return template.format(
-            name=row["nombre"],
-            month=invoice_config["month"],
-            year=invoice_config["year"],
-            lot=row["lote"],
-        )
+        if pending_amount > 0:
+            template = whatsapp_config["template_bad"]
+            return template.format(
+                name=row["nombre"],
+                month=invoice_config["month"],
+                year=invoice_config["year"],
+                pending=pending_amount,
+                lot=row["lote"],
+            )
+        else:
+            template = whatsapp_config["template_good"]
+            return template.format(
+                name=row["nombre"],
+                month=invoice_config["month"],
+                year=invoice_config["year"],
+                lot=row["lote"],
+            )

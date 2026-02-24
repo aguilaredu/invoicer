@@ -11,5 +11,6 @@ class Invoice:
     message: str
     amount: float
     pending_amount: float
+    nueva_cuota: float
     send_receipt: bool
     status: str

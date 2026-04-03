@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Load NVM if it exists
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+
+# Use the default version
+nvm use default --silent || node -v
+
 # Function to keep shell open on exit
 trap 'echo "Press Enter to exit..."; read' EXIT
 

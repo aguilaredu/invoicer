@@ -1,6 +1,6 @@
 invoice:
-  month: "Febrero"
+  month: "Abril"
   year: "2026"
   day_issued: "1"
-  pay_before_day: "28"
+  pay_before_day: "30"
   country_code: "504"

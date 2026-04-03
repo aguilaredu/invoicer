@@ -139,7 +139,7 @@ async function processQueue(client) {
     let total_recs_process = skipped_records + processed_records + 1;
 
     // Log
-    logStep("SYSTEM", "ℹ️", `Processed ${total_recs_process} of ${queue_len}`);
+    logStep("SYS", "ℹ️", ` Processing ${total_recs_process} of ${queue_len}`);
 
     // The record we are going to process
     let rec = queue[i];
@@ -206,7 +206,7 @@ async function processQueue(client) {
       }
     } catch (error) {
       // 5. Exit on Execution "Breakage" (Code crashes)
-      logStep("SYSTEM", "💥", `CRITICAL ERROR: ${error.message}`);
+      logStep("SYS", "💥", `CRITICAL ERROR: ${error.message}`);
 
       // Save progress one last time if possible before dying
       try {
@@ -246,7 +246,7 @@ async function batchWait(currentCount) {
     const wait_time_ms = randomDelay(WAIT_TIME_MIN_S, WAIT_TIME_MAX_S);
 
     logStep(
-      "SYSTEM",
+      "SYS",
       "😴",
       `Waiting for ${wait_time_ms / 1000}s before the next batch...`,
     );

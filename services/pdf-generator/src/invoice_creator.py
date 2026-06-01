@@ -116,17 +116,29 @@ class InvoiceCreator:
         print(f"Generating WhatsApp JSON output at {self.whatsapp_output_path}...")
         output_list = []
         for invoice in self.invoices:
-            invoice_dict = asdict(invoice)
+            # Split phone by semicolon and clean up
+            raw_phones = [p.strip() for p in str(invoice.phone).split(";") if p.strip()]
 
-            # Use the basename for the filename field in the JSON
-            invoice_dict["filename"] = os.path.join(
-                invoice.lot, os.path.basename(invoice.filename)
-            )
+            # Fallback to the original value if no valid phones found after split
+            phones_to_process = raw_phones if raw_phones else [invoice.phone]
 
-            # Add the country code
-            invoice_dict["countryCode"] = self.invoice_config.get("country_code", "")
+            for phone in phones_to_process:
+                invoice_dict = asdict(invoice)
 
-            output_list.append(invoice_dict)
+                # Override the phone number with the individual one
+                invoice_dict["phone"] = phone
+
+                # Use the basename for the filename field in the JSON
+                invoice_dict["filename"] = os.path.join(
+                    invoice.lot, os.path.basename(invoice.filename)
+                )
+
+                # Add the country code
+                invoice_dict["countryCode"] = self.invoice_config.get(
+                    "country_code", ""
+                )
+
+                output_list.append(invoice_dict)
 
         with open(self.whatsapp_output_path, "w", encoding="utf-8") as f:
             json.dump(output_list, f, indent=2, ensure_ascii=False)
